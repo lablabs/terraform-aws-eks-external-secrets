@@ -36,7 +36,7 @@ resource "helm_release" "argocd_application" {
   namespace = var.argo_namespace
 
   values = [
-    var.values
+    data.utils_deep_merge_yaml.argo_application_values[0].output
   ]
 }
 
