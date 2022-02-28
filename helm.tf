@@ -8,7 +8,7 @@ resource "helm_release" "this" {
   repository       = var.helm_repo_url
 
   values = [
-    data.utils_deep_merge_yaml.values[0].output
+    var.values
   ]
 
   dynamic "set" {
