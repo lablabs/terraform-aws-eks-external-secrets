@@ -30,10 +30,10 @@ variable "helm_repo_url" {
 variable "helm_create_namespace" {
   type        = bool
   default     = true
-  description = "Whether to create k8s namespace with name defined by `k8s_namespace`"
+  description = "Whether to create k8s namespace with name defined by `namespace`"
 }
 
-variable "k8s_namespace" {
+variable "namespace" {
   type        = string
   default     = "kube-system"
   description = "The K8s namespace in which the external-secrets will be installed"
@@ -75,7 +75,7 @@ variable "argo_application_values" {
   description = "Value overrides to use when deploying argo application object with helm"
 }
 
-variable "argo_destionation_server" {
+variable "argo_destination_server" {
   type        = string
   default     = "https://kubernetes.default.svc"
   description = "Destination server for ArgoCD Application"
