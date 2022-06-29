@@ -2,20 +2,35 @@
 
 [![Labyrinth Labs logo](ll-logo.png)](https://www.lablabs.io)
 
-We help companies build, run, deploy and scale software and infrastructure by embracing the right technologies and principles. Check out our website at https://lablabs.io/
+We help companies build, run, deploy and scale software and infrastructure by embracing the right technologies and principles. Check out our website at <https://lablabs.io/>
 
 ---
 
-![Terraform validation](https://github.com/lablabs/terraform-aws-eks-external-dns/workflows/Terraform%20validation/badge.svg?branch=master)
-[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-success?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
+[![Terraform validate](https://github.com/lablabs/terraform-aws-eks-external-secrets/actions/workflows/validate.yaml/badge.svg)](https://github.com/lablabs/terraform-aws-eks-external-secrets/actions/workflows/validate.yaml)
+[![pre-commit](https://github.com/lablabs/terraform-aws-eks-external-secrets/workflows/pre-commit.yml/badge.svg)](https://github.com/lablabs/terraform-aws-eks-external-secrets/actions/workflows/pre-commit.yml)
 
 ## Description
 
-A terraform module to deploy an External Secrets Operator on Amazon EKS cluster.
+A terraform module to deploy the External Secrets Operator on Amazon EKS cluster.
 
 ## Related Projects
 
-Check out other [terraform kubernetes addons](https://github.com/lablabs?q=terraform-eks).
+Check out other [terraform kubernetes addons](https://github.com/orgs/lablabs/repositories?q=terraform-aws-eks&type=public&language=&sort=).
+
+## Deployment methods
+
+### Helm
+Deploy helm chart by helm (default method, set `enabled = true`)
+
+### Argo kubernetes
+Deploy helm chart as argo application by kubernetes manifest (set `enabled = true` and `argo_enabled = true`)
+
+### Argo helm
+When deploying with ArgoCD application, Kubernetes terraform provider requires access to Kubernetes cluster API during plan time. This introduces potential issue when you want to deploy the cluster with this addon at the same time, during the same Terraform run.
+
+To overcome this issue, the module deploys the ArgoCD application object using the Helm provider, which does not require API access during plan. If you want to deploy the application using this workaround, you can set the `argo_helm_enabled` variable to `true`.
+
+Create helm release resource and deploy it as argo application (set `enabled = true`, `argo_enabled = true` and `argo_helm_enabled = true`)
 
 ## Examples
 
@@ -127,7 +142,7 @@ Feel free to create an issue in this repository if you have questions, suggestio
 
 We want to provide high quality code and modules. For this reason we are using
 several [pre-commit hooks](.pre-commit-config.yaml) and
-[GitHub Actions workflow](.github/workflows/main.yml). A pull-request to the
+[GitHub Actions workflows](.github/workflows/). A pull-request to the
 master branch will trigger these validations and lints automatically. Please
 check your code before you will create pull-requests. See
 [pre-commit documentation](https://pre-commit.com/) and
