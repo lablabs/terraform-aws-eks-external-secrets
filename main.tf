@@ -18,4 +18,6 @@ locals {
     helm_repo_url      = "https://lablabs.github.i://charts.external-secrets.io"
 
   }
+  
+  addon_values = yamlencode({})
 }
