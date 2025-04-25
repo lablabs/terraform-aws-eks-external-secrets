@@ -2,9 +2,36 @@ module "addon_installation_disabled" {
   source = "../../"
 
   enabled = false
+}
 
-  cluster_identity_oidc_issuer     = module.eks_cluster.eks_cluster_identity_oidc_issuer
-  cluster_identity_oidc_issuer_arn = module.eks_cluster.eks_cluster_identity_oidc_issuer_arn
+locals {
+  values = {
+    "replicaCount" : 2
+    "leaderElect" : true
+    "podLabels" : {
+      "app" : "external-secrets"
+    }
+    "affinity" : {
+      "podAntiAffinity" : {
+        "requiredDuringSchedulingIgnoredDuringExecution" : [
+          {
+            "labelSelector" : {
+              "matchExpressions" : [
+                {
+                  "key" : "app"
+                  "operator" : "In"
+                  "values" : [
+                    "external-secrets"
+                  ]
+                }
+              ]
+            }
+            "topologyKey" : "topology.kubernetes.io/zone"
+          }
+        ]
+      }
+    }
+  }
 }
 
 module "addon_installation_helm" {
@@ -14,11 +41,8 @@ module "addon_installation_helm" {
   argo_enabled      = false
   argo_helm_enabled = false
 
-  cluster_identity_oidc_issuer     = module.eks_cluster.eks_cluster_identity_oidc_issuer
-  cluster_identity_oidc_issuer_arn = module.eks_cluster.eks_cluster_identity_oidc_issuer_arn
-
   values = yamlencode({
-    # insert sample values here
+    local.values
   })
 }
 
@@ -30,11 +54,8 @@ module "addon_installation_argo_kubernetes" {
   argo_enabled      = true
   argo_helm_enabled = false
 
-  cluster_identity_oidc_issuer     = module.eks_cluster.eks_cluster_identity_oidc_issuer
-  cluster_identity_oidc_issuer_arn = module.eks_cluster.eks_cluster_identity_oidc_issuer_arn
-
   values = yamlencode({
-    # insert sample values here
+    local.values
   })
 
   argo_sync_policy = {
@@ -50,8 +71,6 @@ module "addon_installation_argo_helm" {
   argo_enabled      = true
   argo_helm_enabled = true
 
-  cluster_identity_oidc_issuer     = module.eks_cluster.eks_cluster_identity_oidc_issuer
-  cluster_identity_oidc_issuer_arn = module.eks_cluster.eks_cluster_identity_oidc_issuer_arn
 
   argo_sync_policy = {
     automated   = {}
