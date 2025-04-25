@@ -4,36 +4,6 @@ module "addon_installation_disabled" {
   enabled = false
 }
 
-locals {
-  values = {
-    "replicaCount" : 2
-    "leaderElect" : true
-    "podLabels" : {
-      "app" : "external-secrets"
-    }
-    "affinity" : {
-      "podAntiAffinity" : {
-        "requiredDuringSchedulingIgnoredDuringExecution" : [
-          {
-            "labelSelector" : {
-              "matchExpressions" : [
-                {
-                  "key" : "app"
-                  "operator" : "In"
-                  "values" : [
-                    "external-secrets"
-                  ]
-                }
-              ]
-            }
-            "topologyKey" : "topology.kubernetes.io/zone"
-          }
-        ]
-      }
-    }
-  }
-}
-
 module "addon_installation_helm" {
   source = "../../"
 
@@ -42,7 +12,7 @@ module "addon_installation_helm" {
   argo_helm_enabled = false
 
   values = yamlencode({
-    local.values
+    # Insert your helm values	
   })
 }
 
@@ -55,7 +25,7 @@ module "addon_installation_argo_kubernetes" {
   argo_helm_enabled = false
 
   values = yamlencode({
-    local.values
+    # Insert your helm values	
   })
 
   argo_sync_policy = {
