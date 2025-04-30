@@ -12,7 +12,7 @@ module "addon_installation_helm" {
   argo_helm_enabled = false
 
   values = yamlencode({
-    # Insert your helm values	
+    # Insert your helm values
   })
 }
 
@@ -25,7 +25,7 @@ module "addon_installation_argo_kubernetes" {
   argo_helm_enabled = false
 
   values = yamlencode({
-    # Insert your helm values	
+    # Insert your helm values
   })
 
   argo_sync_policy = {
