@@ -13,7 +13,6 @@ locals {
     name      = "external-secrets"
     namespace = "kube-system"
 
-    helm_chart_name    = "external-secrets"
     helm_chart_version = "0.14.2"
     helm_repo_url      = "https://charts.external-secrets.io"
 
